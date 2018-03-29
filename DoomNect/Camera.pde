@@ -11,14 +11,18 @@ public class Camera {
     this.pos = pos;
   }
   
-  public void move(PVector translation) {
-    pos = pos.add(translation);
+  public void move(PVector dPos) {
+    pos = pos.add(dPos);
   }
   
   
   
   public void move(float x, float y, float z) {
     move(new PVector(x,y,z));
+  }
+  
+  public void moveDirectional(PVector dPosRot){
+    move(rotY(dPosRot, azimuth));
   }
   
   public void draw() {
