@@ -28,8 +28,8 @@ public class Camera {
   public void rotateView(float dAzi, float dEle) {
     azimuth += dAzi;
     elevation += dEle;
-    if (elevation < -PI/2) elevation = -PI/2;
-    if (elevation > PI/2) elevation = PI/2;
+    if (elevation < -PI/2) elevation = -PI/2 + 0.001;
+    if (elevation > PI/2) elevation = PI/2 - 0.001 ;
     if (azimuth > 2*PI) azimuth -= 2*PI;
     if (azimuth < 0) azimuth += 2*PI;
   }

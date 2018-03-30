@@ -8,6 +8,7 @@ boolean[] moveDir = {false, false, false, false};
 Camera c = new Camera(new PVector(0,50,-200));
 boolean clicking = false;
 float[] lastMousePos = {0,0};
+long time;
 
 public void setup() {
   size(1600, 900, P3D);
@@ -21,15 +22,29 @@ public void setup() {
   box.setSize(400, 40, 400);
   box.shapeOrientation(null, new PVector(0, -20, 0));
   shapes[0] = box;
+  s = loadShape("shapes/pickaxe.obj");
+  s.translate(0,0,-70);
+  s.rotateX(0.5*PI);
+  
+  smooth(4);
+  hint(DISABLE_TEXTURE_MIPMAPS);
+  ((PGraphicsOpenGL)g).textureSampling(2);
+  
+  time = millis();
 }
 
 public void draw() {
+  long t = millis() - time;
+  time = millis();
+  
   background(51, 204, 255);
   ambientLight(100,100,100);
   directionalLight(255, 255, 255, 0.7, -0.7, 1);
   
   c.draw();
-  
+  shape(s);
+  s.translate(0,0.5 * sin(time/500.0),0);
+  s.rotateY(0.01);
   shapes[0].draw();
   
   moveC();
@@ -37,7 +52,7 @@ public void draw() {
 }
 
 public void moveC() {
-  float speed = 10;
+  float speed = 2;
   if (moveDir[0] && !moveDir[2]) {
     c.move(new PVector(speed, 0, 0));
   } else if (!moveDir[0] && moveDir[2]){
