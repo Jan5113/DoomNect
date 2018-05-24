@@ -11,6 +11,8 @@ boolean clicking = false;
 float[] lastMousePos = {0,0};
 long time;
 
+Diamond d = new Diamond(new PVector(50, 50, 50));
+
 public void setup() {
   size(1600, 900, P3D);
   
@@ -25,6 +27,7 @@ public void setup() {
   s = loadShape("shapes/pickaxe.obj");
   s.translate(0,0,-70);
   s.rotateX(0.5*PI);
+  
   
   smooth(4);
   hint(DISABLE_TEXTURE_MIPMAPS);
@@ -46,6 +49,8 @@ public void draw() {
   s.translate(0,0.5 * sin(time/500.0),0);
   s.rotateY(0.01);
   shapes[0].draw();
+  
+  d.draw();
   
   moveC();
   
@@ -80,7 +85,7 @@ public void mouseDragged(){
   if (clicking) {
     c.rotateView(0.005* (mouseX - lastMousePos[0]), -0.005 * (mouseY - lastMousePos[1]));
     lastMousePos[0] = mouseX; lastMousePos[1] = mouseY;
-    println(lastMousePos[0], lastMousePos[1]);
+    //println(lastMousePos[0], lastMousePos[1]);
   }
 }
 
