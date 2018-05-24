@@ -2,7 +2,7 @@ public class Diamond{
   PVector pos;
   boolean collision;
   int size = 10;
-  
+  //Haaa loool sourcetree figgt chnüüü
   PShape d;
   
   public Diamond(PVector position, PShape shape){
