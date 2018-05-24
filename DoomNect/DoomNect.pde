@@ -10,9 +10,11 @@ Camera c = new Camera(new PVector(0,50,-200));
 boolean clicking = false;
 float[] lastMousePos = {0,0};
 long time;
+ArrayList<Ball> balls = new ArrayList<Ball>();
 
 public void setup() {
   size(1600, 900, P3D);
+  perspective(1.5, (float) width/(float) height, 10, 1000);
   
   Box box = new Box(this);
   
@@ -34,7 +36,7 @@ public void setup() {
 }
 
 public void draw() {
-  long t = millis() - time;
+  float dt = (millis() - time)*0.001;
   time = millis();
   
   background(51, 204, 255);
@@ -47,8 +49,15 @@ public void draw() {
   s.rotateY(0.01);
   shapes[0].draw();
   
-  moveC();
+  for (int i = 0; i < balls.size(); i++) {
+    balls.get(i).draw();
+    balls.get(i).move(dt);
+    if (balls.get(i).lifetime<0){
+      balls.remove(i);
+    }
+  }
   
+  moveC();  
 }
 
 public void moveC() {
@@ -70,6 +79,15 @@ public void moveC() {
 public void mousePressed(){
   clicking = true;
   lastMousePos[0] = mouseX; lastMousePos[1] = mouseY;
+}
+
+public void mouseClicked(MouseEvent evt) {
+  if (evt.getCount() == 2){
+    PVector dir = new PVector (1, 0, 0);
+    dir = c.rotY(c.rotZ(dir, c.elevation), -c.azimuth);
+    Ball b = new Ball(c.pos.copy(), dir.mult(1000));
+    balls.add(b);
+  }
 }
 
 public void mouseReleased(){
