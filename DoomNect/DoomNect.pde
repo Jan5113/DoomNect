@@ -2,10 +2,6 @@ import shapes3d.*;
 import shapes3d.animation.*;
 import shapes3d.utils.*;
 
-import KinectPV2.KJoint;
-import KinectPV2.*;
-
-KinectPV2 kinect;
 
 PShape s;
 Shape3D[] shapes = new Shape3D[1];
@@ -17,7 +13,6 @@ long time;
 
 public void setup() {
   size(1600, 900, P3D);
-  //s = loadShape("test.obj");
   
   Box box = new Box(this);
   
@@ -51,21 +46,6 @@ public void draw() {
   s.translate(0,0.5 * sin(time/500.0),0);
   s.rotateY(0.01);
   shapes[0].draw();
-  
-  ArrayList<KSkeleton> skeletonArray =  kinect.getSkeleton3d();
-
-  //individual JOINTS
-  for (int i = 0; i < skeletonArray.size(); i++) {
-    KSkeleton skeleton = (KSkeleton) skeletonArray.get(i);
-    if (skeleton.isTracked()) {
-      KJoint[] joints = skeleton.getJoints();
-
-      //Draw body
-      color col  = skeleton.getIndexColor();
-      stroke(col);
-      drawBody(joints);
-    }
-  }
   
   moveC();
   
@@ -126,21 +106,4 @@ public void keyReleased() {
   } else if (key == 'd') {
     moveDir[3] = false;
   } 
-}
-
-void drawBody(KJoint[] joints) {
-  drawJoint(joints, KinectPV2.JointType_HandTipLeft);
-  drawJoint(joints, KinectPV2.JointType_HandTipRight);
-  drawJoint(joints, KinectPV2.JointType_FootLeft);
-  drawJoint(joints, KinectPV2.JointType_FootRight);
-
-  drawJoint(joints, KinectPV2.JointType_ThumbLeft);
-  drawJoint(joints, KinectPV2.JointType_ThumbRight);
-
-  drawJoint(joints, KinectPV2.JointType_Head);
-}
-
-void drawJoint(KJoint[] joints, int jointType) {
-  strokeWeight(2.0f + joints[jointType].getZ()*8);
-  point(joints[jointType].getX(), joints[jointType].getY(), joints[jointType].getZ());
 }
