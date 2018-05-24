@@ -4,6 +4,7 @@ import shapes3d.utils.*;
 
 
 PShape s;
+PShape diamond;
 Shape3D[] shapes = new Shape3D[1];
 boolean[] moveDir = {false, false, false, false};
 Camera c = new Camera(new PVector(0,50,-200));
@@ -11,6 +12,8 @@ boolean clicking = false;
 float[] lastMousePos = {0,0};
 long time;
 ArrayList<Ball> balls = new ArrayList<Ball>();
+
+Diamond d;
 
 public void setup() {
   size(1600, 900, P3D);
@@ -27,6 +30,9 @@ public void setup() {
   s = loadShape("shapes/pickaxe.obj");
   s.translate(0,0,-70);
   s.rotateX(0.5*PI);
+  diamond = loadShape("shapes/diamond.obj");
+  d = new Diamond(new PVector(50, 50, 50), diamond);
+  
   
   smooth(4);
   hint(DISABLE_TEXTURE_MIPMAPS);
@@ -56,6 +62,8 @@ public void draw() {
       balls.remove(i);
     }
   }
+  d.draw();
+  
   
   moveC();  
 }
@@ -98,7 +106,7 @@ public void mouseDragged(){
   if (clicking) {
     c.rotateView(0.005* (mouseX - lastMousePos[0]), -0.005 * (mouseY - lastMousePos[1]));
     lastMousePos[0] = mouseX; lastMousePos[1] = mouseY;
-    println(lastMousePos[0], lastMousePos[1]);
+    //println(lastMousePos[0], lastMousePos[1]);
   }
 }
 
