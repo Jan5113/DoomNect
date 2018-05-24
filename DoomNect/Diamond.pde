@@ -3,17 +3,47 @@ public class Diamond{
   boolean collision;
   int size = 10;
   
-  public Diamond(PVector position){
+  PShape d;
+  
+  public Diamond(PVector position, PShape shape){
     pos = position;
-     
+    
+    d = shape;
+    d.scale(20);
+    
   }
+  
   
   public void draw(){
     pushMatrix();
     translate(pos.x, pos.y, pos.z);
     stroke(255, 0, 0);
     fill(9, 255, 255);
-    sphere(size);
+    
+    shape(d);
+    
+    //sphere(size);
+    
+    /*
+    beginShape();
+    vertex(-10, -10, -10);
+    vertex( 10, -10, -10);
+    vertex(  0,   0,  10);
+    
+    vertex( 10, -10, -10);
+    vertex( 10,  10, -10);
+    vertex(  0,  0,  10);
+    
+    vertex( 10, 10, -10);
+    vertex(-10, 10, -10);
+    vertex(  0,  0,  10);
+    
+    vertex(-10,  10, -10);
+    vertex(-10, -10, -10);
+    vertex(  0,   0,  10);
+    endShape()
+    */
+
     popMatrix();
   }
   
