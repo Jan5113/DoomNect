@@ -17,7 +17,7 @@ Diamond d;
 
 public void setup() {
   size(1600, 900, P3D);
-  perspective(1.5, (float) width/(float) height, 10, 1000);
+  perspective(1.5, (float) width/(float) height, 10, 2000);
   
   Box box = new Box(this);
   
@@ -91,10 +91,7 @@ public void mousePressed(){
 
 public void mouseClicked(MouseEvent evt) {
   if (evt.getCount() == 2){
-    PVector dir = new PVector (1, 0, 0);
-    dir = c.rotY(c.rotZ(dir, c.elevation), -c.azimuth);
-    Ball b = new Ball(c.pos.copy(), dir.mult(1000));
-    balls.add(b);
+    shootBall();
   }
 }
 
@@ -110,6 +107,15 @@ public void mouseDragged(){
   }
 }
 
+public void shootBall() {
+  PVector dir = new PVector (1, 0, 0);
+  float rotAz = ((float)mouseX/width-0.5)*2.1;
+  float rotEl = ((float)mouseY/height-0.5)*1.5;
+  dir = c.rotY(c.rotZ(dir, c.elevation-rotEl), -c.azimuth-rotAz);
+  Ball b = new Ball(c.pos.copy(), dir.mult(750));
+  balls.add(b);
+}
+
 public void keyPressed() {
   if (key == 'w') {
     moveDir[0] = true;
@@ -119,7 +125,7 @@ public void keyPressed() {
     moveDir[2] = true;
   } else if (key == 'd') {
     moveDir[3] = true;
-  } 
+  }
 }
 
 public void keyReleased() {

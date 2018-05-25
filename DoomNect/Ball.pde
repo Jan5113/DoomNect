@@ -1,8 +1,8 @@
 public class Ball {
   private PVector pos = new PVector(0, 0, 0);
   private PVector vel = new PVector();
-  private PVector acc = new PVector(0, -500, 0);
-  private float lifetime = 10;
+  private PVector acc = new PVector(0, -600, 0);
+  private float lifetime = 30;
   private float radius = 10;
   
   public Ball(PVector pos, PVector vel) {
