@@ -4,7 +4,7 @@ import shapes3d.utils.*;
 
 
 PShape s;
-PShape diamond;
+PShape diamondShape;
 Shape3D[] shapes = new Shape3D[1];
 boolean[] moveDir = {false, false, false, false};
 Camera c = new Camera(new PVector(0,50,-200));
@@ -12,6 +12,9 @@ boolean clicking = false;
 float[] lastMousePos = {0,0};
 long time;
 ArrayList<Ball> balls = new ArrayList<Ball>();
+ArrayList<Diamond> diamonds = new ArrayList<Diamond>();
+int points;
+
 
 Diamond d;
 
@@ -30,8 +33,8 @@ public void setup() {
   s = loadShape("shapes/pickaxe.obj");
   s.translate(0,0,-70);
   s.rotateX(0.5*PI);
-  diamond = loadShape("shapes/diamond.obj");
-  d = new Diamond(new PVector(50, 50, 50), diamond);
+  diamondShape = loadShape("shapes/diamond.obj");
+  diamonds.add(new Diamond(new PVector(50, 50, 50), diamondShape));
   
   
   smooth(4);
@@ -54,6 +57,7 @@ public void draw() {
   s.translate(0,0.5 * sin(time/500.0),0);
   s.rotateY(0.01);
   shapes[0].draw();
+  //text("Points: "+ points, 1300,0);
   
   for (int i = 0; i < balls.size(); i++) {
     balls.get(i).draw();
@@ -62,7 +66,21 @@ public void draw() {
       balls.remove(i);
     }
   }
-  d.draw();
+  for (int i = 0; i < diamonds.size(); i++) {
+    diamonds.get(i).draw();
+    //diamonds.get(i).move(dt);
+    for (Ball b:balls) {
+      if (diamonds.get(i).isColliding(b)){
+        diamonds.remove(i);
+        points++;
+        break;
+      
+      }
+    }
+    
+  }
+  
+  
   
   
   moveC();  
@@ -87,6 +105,10 @@ public void moveC() {
 public void mousePressed(){
   clicking = true;
   lastMousePos[0] = mouseX; lastMousePos[1] = mouseY;
+}
+
+public void points(){
+  
 }
 
 public void mouseClicked(MouseEvent evt) {
