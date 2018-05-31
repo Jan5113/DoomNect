@@ -2,22 +2,25 @@ import shapes3d.*;
 import shapes3d.animation.*;
 import shapes3d.utils.*;
 
-import KinectPV2.KJoint;
-import KinectPV2.*;
-
-KinectPV2 kinect;
 
 PShape s;
+PShape diamondShape;
 Shape3D[] shapes = new Shape3D[1];
 boolean[] moveDir = {false, false, false, false};
 Camera c = new Camera(new PVector(0,50,-200));
 boolean clicking = false;
 float[] lastMousePos = {0,0};
 long time;
+ArrayList<Ball> balls = new ArrayList<Ball>();
+ArrayList<Diamond> diamonds = new ArrayList<Diamond>();
+int points;
+
+
+Diamond d;
 
 public void setup() {
   size(1600, 900, P3D);
-  //s = loadShape("test.obj");
+  perspective(1.5, (float) width/(float) height, 10, 2000);
   
   Box box = new Box(this);
   
@@ -30,23 +33,19 @@ public void setup() {
   s = loadShape("shapes/pickaxe.obj");
   s.translate(0,0,-70);
   s.rotateX(0.5*PI);
+  diamondShape = loadShape("shapes/diamond.obj");
+  diamonds.add(new Diamond(new PVector(50, 50, 50), diamondShape));
+  
   
   smooth(4);
   hint(DISABLE_TEXTURE_MIPMAPS);
   ((PGraphicsOpenGL)g).textureSampling(2);
   
   time = millis();
-  
-  kinect = new KinectPV2(this);
-
-  kinect.enableSkeletonColorMap(true);
-  kinect.enableColorImg(true);
-
-  kinect.init();
 }
 
 public void draw() {
-  long t = millis() - time;
+  float dt = (millis() - time)*0.001;
   time = millis();
   
   background(51, 204, 255);
@@ -58,30 +57,33 @@ public void draw() {
   s.translate(0,0.5 * sin(time/500.0),0);
   s.rotateY(0.01);
   shapes[0].draw();
+  //text("Points: "+ points, 1300,0);
   
-  ArrayList<KSkeleton> skeletonArray =  kinect.getSkeletonColorMap();
-pushMatrix();
- scale(-1.0, -1.0);
- 
-  //individual JOINTS
-  for (int i = 0; i < skeletonArray.size(); i++) {
-    KSkeleton skeleton = (KSkeleton) skeletonArray.get(i);
-    if (skeleton.isTracked()) {
-      KJoint[] joints = skeleton.getJoints();
-
-      //Draw body
-      color col  = skeleton.getIndexColor();
-      stroke(col);
-      drawBody(joints);
+  for (int i = 0; i < balls.size(); i++) {
+    balls.get(i).draw();
+    balls.get(i).move(dt);
+    if (balls.get(i).lifetime<0){
+      balls.remove(i);
     }
   }
- 
- image(kinect.getColorImage(), 0, -200, width/5, height/5);
- popMatrix();
+  for (int i = 0; i < diamonds.size(); i++) {
+    diamonds.get(i).draw();
+    //diamonds.get(i).move(dt);
+    for (Ball b:balls) {
+      if (diamonds.get(i).isColliding(b)){
+        diamonds.remove(i);
+        points++;
+        break;
+      
+      }
+    }
+    
+  }
   
   
-  moveC();
   
+  
+  moveC();  
 }
 
 public void moveC() {
@@ -105,6 +107,16 @@ public void mousePressed(){
   lastMousePos[0] = mouseX; lastMousePos[1] = mouseY;
 }
 
+public void points(){
+  
+}
+
+public void mouseClicked(MouseEvent evt) {
+  if (evt.getCount() == 2){
+    shootBall();
+  }
+}
+
 public void mouseReleased(){
   clicking = false;
 }
@@ -113,7 +125,17 @@ public void mouseDragged(){
   if (clicking) {
     c.rotateView(0.005* (mouseX - lastMousePos[0]), -0.005 * (mouseY - lastMousePos[1]));
     lastMousePos[0] = mouseX; lastMousePos[1] = mouseY;
+    //println(lastMousePos[0], lastMousePos[1]);
   }
+}
+
+public void shootBall() {
+  PVector dir = new PVector (1, 0, 0);
+  float rotAz = ((float)mouseX/width-0.5)*2.1;
+  float rotEl = ((float)mouseY/height-0.5)*1.5;
+  dir = c.rotY(c.rotZ(dir, c.elevation-rotEl), -c.azimuth-rotAz);
+  Ball b = new Ball(c.pos.copy(), dir.mult(750));
+  balls.add(b);
 }
 
 public void keyPressed() {
@@ -125,7 +147,7 @@ public void keyPressed() {
     moveDir[2] = true;
   } else if (key == 'd') {
     moveDir[3] = true;
-  } 
+  }
 }
 
 public void keyReleased() {
@@ -138,26 +160,4 @@ public void keyReleased() {
   } else if (key == 'd') {
     moveDir[3] = false;
   } 
-}
-
-void drawBody(KJoint[] joints) {
-  drawJoint(joints, KinectPV2.JointType_HandTipLeft);
-  drawJoint(joints, KinectPV2.JointType_HandTipRight);
-  drawJoint(joints, KinectPV2.JointType_FootLeft);
-  drawJoint(joints, KinectPV2.JointType_FootRight);
-
-  drawJoint(joints, KinectPV2.JointType_ThumbLeft);
-  drawJoint(joints, KinectPV2.JointType_ThumbRight);
-
-  drawJoint(joints, KinectPV2.JointType_Head);
-}
-
-void drawJoint(KJoint[] joints, int jointType) {
-  pushMatrix();
-  translate(joints[jointType].getX()/5, joints[jointType].getY()/5, joints[jointType].getZ());
-  stroke(255,255,255);
-  println(joints[jointType].getZ());
-  sphere(10);
-  popMatrix();
-  //println(joints[jointType].getX(), jointType);
 }
