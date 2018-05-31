@@ -1,7 +1,7 @@
 public class Diamond{
   PVector pos;
   boolean collision;
-  int size = 10;
+  int size = 100;
   //Haaa loool sourcetree figgt chnüüü
   PShape d;
   
@@ -51,6 +51,7 @@ public class Diamond{
     float distance = sqrt(b.pos.x*b.pos.x+b.pos.y*b.pos.y+b.pos.z*b.pos.z);
     
     if(distance <= size){
+      
       collision = true;
     }
     
