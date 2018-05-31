@@ -1,7 +1,10 @@
 import shapes3d.*;
 import shapes3d.animation.*;
 import shapes3d.utils.*;
+import KinectPV2.KJoint;
+import KinectPV2.*;
 
+KinectPV2 kinect;
 
 PShape s;
 PShape diamondShape;
@@ -14,7 +17,6 @@ long time;
 ArrayList<Ball> balls = new ArrayList<Ball>();
 ArrayList<Diamond> diamonds = new ArrayList<Diamond>();
 int points;
-
 
 Diamond d;
 
@@ -42,6 +44,13 @@ public void setup() {
   ((PGraphicsOpenGL)g).textureSampling(2);
   
   time = millis();
+  
+  kinect = new KinectPV2(this);
+
+  kinect.enableSkeletonColorMap(true);
+  kinect.enableColorImg(true);
+
+  kinect.init();
 }
 
 public void draw() {
@@ -77,6 +86,23 @@ public void draw() {
       
       }
     }
+    ArrayList<KSkeleton> skeletonArray =  kinect.getSkeletonColorMap();
+
+  //individual JOINTS
+  for (i = 0; i < skeletonArray.size(); i++) {
+    KSkeleton skeleton = (KSkeleton) skeletonArray.get(i);
+    if (skeleton.isTracked()) {
+      KJoint[] joints = skeleton.getJoints();
+
+      color col  = skeleton.getIndexColor();
+      fill(col);
+      stroke(col);
+
+      //draw different color for each hand state
+      drawHandState(joints[KinectPV2.JointType_HandRight]);
+      drawHandState(joints[KinectPV2.JointType_HandLeft]);
+    }
+  }
     
   }
   
@@ -113,7 +139,7 @@ public void points(){
 
 public void mouseClicked(MouseEvent evt) {
   if (evt.getCount() == 2){
-    shootBall();
+    shootBall(mouseX,mouseY);
   }
 }
 
@@ -129,10 +155,12 @@ public void mouseDragged(){
   }
 }
 
-public void shootBall() {
+public void shootBall(float x, float y) {
+  x = ((float)x/width-0.5);
+  y = ((float)y/height-0.5);
   PVector dir = new PVector (1, 0, 0);
-  float rotAz = ((float)mouseX/width-0.5)*1.5;
-  float rotEl = ((float)mouseY/height-0.5)*1;
+  float rotAz = x*1.5;
+  float rotEl = y;
   dir = c.rotY(c.rotZ(dir, c.elevation-rotEl), -c.azimuth-rotAz);
   Ball b = new Ball(c.pos.copy(), dir.mult(750));
   balls.add(b);
@@ -160,4 +188,28 @@ public void keyReleased() {
   } else if (key == 'd') {
     moveDir[3] = false;
   } 
+}
+
+void drawHandState(KJoint joint) {
+  handState(joint);
+  //translate(joint.getX(), joint.getY(), joint.getZ());
+}
+
+void handState(KJoint j) {
+  int handState = j.getState();
+  switch(handState) {
+  case KinectPV2.HandState_Open:
+    shootBall(j.getX(), j.getY());
+    println(j.getX(), j.getY());
+    break;
+  case KinectPV2.HandState_Closed:
+    fill(255, 0, 0);
+    break;
+  case KinectPV2.HandState_Lasso:
+    fill(0, 0, 255);
+    break;
+  case KinectPV2.HandState_NotTracked:
+    fill(255, 255, 255);
+    break;
+  }
 }
