@@ -17,7 +17,7 @@ Diamond d;
 
 public void setup() {
   size(1600, 900, P3D);
-  perspective(1.5, (float) width/(float) height, 10, 2000);
+  perspective(1  , (float) width/(float) height, 10, 2000);
   
   Box box = new Box(this);
   
@@ -109,8 +109,8 @@ public void mouseDragged(){
 
 public void shootBall() {
   PVector dir = new PVector (1, 0, 0);
-  float rotAz = ((float)mouseX/width-0.5)*2.1;
-  float rotEl = ((float)mouseY/height-0.5)*1.5;
+  float rotAz = ((float)mouseX/width-0.5)*1.5;
+  float rotEl = ((float)mouseY/height-0.5)*1;
   dir = c.rotY(c.rotZ(dir, c.elevation-rotEl), -c.azimuth-rotAz);
   Ball b = new Ball(c.pos.copy(), dir.mult(750));
   balls.add(b);
