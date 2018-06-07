@@ -1,5 +1,6 @@
 public class Diamond{
   PVector pos;
+  float ystart;
   boolean collision;
   int size = 100;
   //Haaa loool sourcetree figgt chnüüü
@@ -7,7 +8,7 @@ public class Diamond{
   
   public Diamond(PVector position, PShape shape){
     pos = position;
-    
+    ystart = position.y;
     d = shape;
     d.scale(20);
     
@@ -21,7 +22,7 @@ public class Diamond{
     fill(9, 255, 255);
     
     shape(d);
-    
+    move();
     //sphere(size);
     
     /*
@@ -56,6 +57,12 @@ public class Diamond{
     }
     
     return collision;    
+  }
+  
+  public void move(){
+    pos.y = ystart*sin(time/500.0) + ystart;
+    
+    
   }
   
 }
