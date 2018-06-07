@@ -37,8 +37,8 @@ public void setup() {
   //diamonds.add(new Diamond(new PVector(random(100),random(50),random(50)), diamondShape));
   //diamonds.add(new Diamond(new PVector(random(50),random(50),random(50)), diamondShape));
   
-  diamonds.add(new Diamond(new PVector(50,30,40), diamondShape));
-  diamonds.add(new Diamond(new PVector(20,50,40), diamondShape));
+  diamonds.add(new Diamond(new PVector(100,30,40), diamondShape));
+  diamonds.add(new Diamond(new PVector(20,30,400), diamondShape));
   
   /*for(int i = 0; i<10; i++){
   diamonds.add(new Diamond(new PVector(int(random(50)), int(random(50)), int(random(50))), diamondShape));
@@ -61,7 +61,7 @@ public void draw() {
   directionalLight(255, 255, 255, 0.7, -0.7, 1);
   
   c.draw();
-  shape(s);
+  //shape(s);
   s.translate(0,0.5 * sin(time/500.0),0);
   s.rotateY(0.01);
   shapes[0].draw();
@@ -76,11 +76,13 @@ public void draw() {
   }
   for (int i = 0; i < diamonds.size(); i++) {
     diamonds.get(i).draw();
-    print(i);
+    //println(i);
     //diamonds.get(i).move(dt);
     for (Ball b:balls) {
       if (diamonds.get(i).isColliding(b)){
-        diamonds.remove(i);
+        diamonds.remove(i); //<>//
+        println("Removed Diamond:", i);
+        balls.remove(b);
         points++;
         break;
       

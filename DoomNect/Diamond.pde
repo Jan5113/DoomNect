@@ -10,7 +10,7 @@ public class Diamond{
     pos = position;
     ystart = position.y;
     d = shape;
-    d.scale(20);
+    d.scale(10);
     
   }
   
@@ -23,6 +23,7 @@ public class Diamond{
     
     shape(d);
     move();
+    //translate(0, 150, 0);
     //sphere(size);
     
     /*
@@ -49,7 +50,7 @@ public class Diamond{
   }
   
   public boolean isColliding(Ball b){
-    float distance = sqrt(b.pos.x*b.pos.x+b.pos.y*b.pos.y+b.pos.z*b.pos.z);
+    float distance = sqrt(pow(b.pos.x-pos.x, 2)+pow((b.pos.y-pos.y)-150,2)+pow(b.pos.z-pos.z, 2));
     
     if(distance <= size){
       
