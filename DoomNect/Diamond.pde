@@ -10,7 +10,6 @@ public class Diamond{
     pos = position;
     ystart = position.y;
     d = shape;
-    d.scale(10);
     
   }
   

@@ -1,10 +1,12 @@
 import shapes3d.*; //<>//
 import shapes3d.animation.*;
 import shapes3d.utils.*;
+import controlP5.*;
 
 
 PShape s;
 PShape diamondShape;
+PShape diamondShape2;
 Shape3D[] shapes = new Shape3D[1];
 boolean[] moveDir = {false, false, false, false};
 Camera c = new Camera(new PVector(0,50,-200));
@@ -17,11 +19,13 @@ int points;
 
 Diamond d;
 
+ControlP5 cp5;
+ControlWindow controlWindow;
+Canvas cc;
+
 public void setup() {
   size(1600, 900, P3D);
   perspective(1  , (float) width/(float) height, 10, 2000);
-  
-  getGraphics();
   
   Box box = new Box(this);
   
@@ -35,11 +39,16 @@ public void setup() {
   s.translate(0,0,-70);
   s.rotateX(0.5*PI);
   diamondShape = loadShape("shapes/diamond.obj");
+  diamondShape.scale(100);
+  diamondShape2 = loadShape("shapes/diamond.obj");
+  diamondShape2.scale(10);
   //diamonds.add(new Diamond(new PVector(random(100),random(50),random(50)), diamondShape));
   //diamonds.add(new Diamond(new PVector(random(50),random(50),random(50)), diamondShape));
   
   diamonds.add(new Diamond(new PVector(100,30,40), diamondShape));
   diamonds.add(new Diamond(new PVector(20,30,400), diamondShape));
+  diamonds.add(new Diamond(new PVector(200,30,40), diamondShape));
+  diamonds.add(new Diamond(new PVector(100,30,200), diamondShape));
   
   /*for(int i = 0; i<10; i++){
   diamonds.add(new Diamond(new PVector(int(random(50)), int(random(50)), int(random(50))), diamondShape));
@@ -49,7 +58,12 @@ public void setup() {
   smooth(4);
   hint(DISABLE_TEXTURE_MIPMAPS);
   ((PGraphicsOpenGL)g).textureSampling(2);
-  
+  /*
+  cp5 = new ControlP5(this);
+  cc = new MyCanvas();
+  cc.pre();
+  cp5.addCanvas(cc);
+  */
   time = millis();
 }
 
@@ -60,6 +74,9 @@ public void draw() {
   background(51, 204, 255);
   ambientLight(100,100,100);
   directionalLight(255, 255, 255, 0.7, -0.7, 1);
+  smooth(4);
+  hint(DISABLE_TEXTURE_MIPMAPS);
+  ((PGraphicsOpenGL)g).textureSampling(2);
   
   c.draw();
   //shape(s);
@@ -94,17 +111,16 @@ public void draw() {
   
   
   
-  moveC();  
-  
+  moveC();
   //Start HUD 
-  
-  getGraphics().hint(PConstants.DISABLE_DEPTH_TEST);
-  camera();
+  /*
+  hint(DISABLE_DEPTH_TEST);
+  //camera();
   fill(0, 0, 0);
   textMode(MODEL);
   text("Points: "+ points, 50,50);
-  getGraphics().hint(PConstants.ENABLE_DEPTH_TEST);
-  
+  hint(ENABLE_DEPTH_TEST);
+  */
   /*
   hint(DISABLE_DEPTH_TEST);
   camera();
