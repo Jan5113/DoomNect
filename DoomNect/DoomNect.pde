@@ -1,7 +1,7 @@
 import shapes3d.*; //<>//
 import shapes3d.animation.*;
 import shapes3d.utils.*;
-import controlP5.*;
+
 
 
 PShape s;
@@ -18,10 +18,6 @@ ArrayList<Diamond> diamonds = new ArrayList<Diamond>();
 int points;
 
 Diamond d;
-
-ControlP5 cp5;
-ControlWindow controlWindow;
-Canvas cc;
 
 public void setup() {
   size(1600, 900, P3D);
@@ -45,8 +41,8 @@ public void setup() {
   //diamonds.add(new Diamond(new PVector(random(100),random(50),random(50)), diamondShape));
   //diamonds.add(new Diamond(new PVector(random(50),random(50),random(50)), diamondShape));
   
-  diamonds.add(new Diamond(new PVector(100,30,40), diamondShape));
-  diamonds.add(new Diamond(new PVector(20,30,400), diamondShape));
+  diamonds.add(new Diamond(new PVector(100,30,400), diamondShape));
+  diamonds.add(new Diamond(new PVector(500,30,400), diamondShape));
   diamonds.add(new Diamond(new PVector(200,30,40), diamondShape));
   diamonds.add(new Diamond(new PVector(100,30,200), diamondShape));
   
@@ -100,6 +96,7 @@ public void draw() {
         diamonds.remove(i);
         println("Removed Diamond:", i);
         balls.remove(b);
+        diamonds.add(new Diamond(new PVector(random(-100,500),random(0,100),random(-100,500)), diamondShape));
         points++;
         break;
       
