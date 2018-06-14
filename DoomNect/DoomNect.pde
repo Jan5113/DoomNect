@@ -1,4 +1,4 @@
-import shapes3d.*;
+import shapes3d.*; //<>//
 import shapes3d.animation.*;
 import shapes3d.utils.*;
 
@@ -15,12 +15,13 @@ ArrayList<Ball> balls = new ArrayList<Ball>();
 ArrayList<Diamond> diamonds = new ArrayList<Diamond>();
 int points;
 
-
 Diamond d;
 
 public void setup() {
   size(1600, 900, P3D);
   perspective(1  , (float) width/(float) height, 10, 2000);
+  
+  getGraphics();
   
   Box box = new Box(this);
   
@@ -65,7 +66,6 @@ public void draw() {
   s.translate(0,0.5 * sin(time/500.0),0);
   s.rotateY(0.01);
   shapes[0].draw();
-  //text("Points: "+ points, 1300,0);
   
   for (int i = 0; i < balls.size(); i++) {
     balls.get(i).draw();
@@ -80,7 +80,7 @@ public void draw() {
     //diamonds.get(i).move(dt);
     for (Ball b:balls) {
       if (diamonds.get(i).isColliding(b)){
-        diamonds.remove(i); //<>//
+        diamonds.remove(i);
         println("Removed Diamond:", i);
         balls.remove(b);
         points++;
@@ -95,6 +95,23 @@ public void draw() {
   
   
   moveC();  
+  
+  //Start HUD 
+  
+  getGraphics().hint(PConstants.DISABLE_DEPTH_TEST);
+  camera();
+  fill(0, 0, 0);
+  textMode(MODEL);
+  text("Points: "+ points, 50,50);
+  getGraphics().hint(PConstants.ENABLE_DEPTH_TEST);
+  
+  /*
+  hint(DISABLE_DEPTH_TEST);
+  camera();
+  textMode(MODEL);
+  text("Points: "+ points, 50,50);
+  hint(ENABLE_DEPTH_TEST);
+  */
 }
 
 public void moveC() {
