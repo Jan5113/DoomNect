@@ -34,11 +34,11 @@ public class Camera {
     if (azimuth < 0) azimuth += 2*PI;
   }
   
-  public void draw() {
+  public void draw(PGraphics pg) {
     PVector dir = new PVector (1, 0, 0);
     dir = rotY(rotZ(dir, elevation), -azimuth);
     dir.add(pos);
-    camera(pos.x, pos.y, pos.z, dir.x, dir.y, dir.z, 0, -1, 0);
+    pg.camera(pos.x, pos.y, pos.z, dir.x, dir.y, dir.z, 0, -1, 0);
     //pos = rotY(pos, 0.01);
     //azimuth -= 0.01;
   }

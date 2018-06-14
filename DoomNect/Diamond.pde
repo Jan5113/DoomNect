@@ -14,13 +14,13 @@ public class Diamond{
   }
   
   
-  public void draw(){
-    pushMatrix();
-    translate(pos.x, pos.y, pos.z);
-    stroke(255, 0, 0);
-    fill(9, 255, 255);
+  public void draw(PGraphics pg){
+    pg.pushMatrix();
+    pg.translate(pos.x, pos.y, pos.z);
+    pg.stroke(255, 0, 0);
+    pg.fill(9, 255, 255);
     
-    shape(d);
+    pg.shape(d);
     move();
     //translate(0, 150, 0);
     //sphere(size);
@@ -45,7 +45,7 @@ public class Diamond{
     endShape()
     */
 
-    popMatrix();
+    pg.popMatrix();
   }
   
   public boolean isColliding(Ball b){
@@ -61,8 +61,6 @@ public class Diamond{
   
   public void move(){
     pos.y = ystart*sin(time/500.0) + ystart;
-    
-    
   }
   
 }

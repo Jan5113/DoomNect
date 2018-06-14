@@ -20,14 +20,14 @@ public class Ball {
     };
   }
   
-  public void draw(){
+  public void draw(PGraphics pg){
     if (lifetime <= 0) return;
-    pushMatrix();
-    translate(pos.x, pos.y, pos.z);
-    noStroke();
-    fill(0,0,255);
-    sphere(radius);
-    popMatrix();
+    pg.pushMatrix();
+    pg.translate(pos.x, pos.y, pos.z);
+    pg.noStroke();
+    pg.fill(0,0,255);
+    pg.sphere(radius);
+    pg.popMatrix();
   }
   
 }

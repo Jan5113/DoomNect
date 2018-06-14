@@ -1,13 +1,7 @@
-import shapes3d.*; //<>//
-import shapes3d.animation.*;
-import shapes3d.utils.*;
-
-
-
+ //<>//
 PShape s;
 PShape diamondShape;
 PShape diamondShape2;
-Shape3D[] shapes = new Shape3D[1];
 boolean[] moveDir = {false, false, false, false};
 Camera c = new Camera(new PVector(0,50,-200));
 boolean clicking = false;
@@ -17,23 +11,17 @@ ArrayList<Ball> balls = new ArrayList<Ball>();
 ArrayList<Diamond> diamonds = new ArrayList<Diamond>();
 int points;
 
+PGraphics p2, p3;
+
 Diamond d;
 
 public void setup() {
-  size(1600, 900, P3D);
+  size(1600, 900, P2D);
   perspective(1  , (float) width/(float) height, 10, 2000);
   
-  Box box = new Box(this);
+  p2 = createGraphics(width, height, P2D);
+  p3 = createGraphics(width, height, P3D);
   
-  box.fill(color(0, 204, 0));
-  box.stroke(color(255,0,0));
-  box.strokeWeight(5.2f);
-  box.setSize(400, 40, 400);
-  box.shapeOrientation(null, new PVector(0, -20, 0));
-  shapes[0] = box;
-  s = loadShape("shapes/pickaxe.obj");
-  s.translate(0,0,-70);
-  s.rotateX(0.5*PI);
   diamondShape = loadShape("shapes/diamond.obj");
   diamondShape.scale(100);
   diamondShape2 = loadShape("shapes/diamond.obj");
@@ -64,31 +52,45 @@ public void setup() {
 }
 
 public void draw() {
+  background(51, 204, 255);
+  
+  draw3D(p3);
+  drawHUD(p2);
+  
+  image(p3, 0, 0);
+  image(p2, 0, 0);
+  moveC();
+}
+
+void drawHUD(PGraphics pg){
+  pg.beginDraw();
+  pg.text("loooooolololol", 10, 10);
+  pg.endDraw();
+}
+
+void draw3D(PGraphics pg){
+  pg.beginDraw();
+  pg.clear();
   float dt = (millis() - time)*0.001;
   time = millis();
   
-  background(51, 204, 255);
-  ambientLight(100,100,100);
-  directionalLight(255, 255, 255, 0.7, -0.7, 1);
-  smooth(4);
-  hint(DISABLE_TEXTURE_MIPMAPS);
+  pg.ambientLight(100,100,100);
+  pg.directionalLight(255, 255, 255, 0.7, -0.7, 1);
+  pg.smooth(4);
+  pg.hint(DISABLE_TEXTURE_MIPMAPS);
   ((PGraphicsOpenGL)g).textureSampling(2);
   
-  c.draw();
-  //shape(s);
-  s.translate(0,0.5 * sin(time/500.0),0);
-  s.rotateY(0.01);
-  shapes[0].draw();
+  c.draw(pg);
   
   for (int i = 0; i < balls.size(); i++) {
-    balls.get(i).draw();
+    balls.get(i).draw(pg);
     balls.get(i).move(dt);
     if (balls.get(i).lifetime<0){
       balls.remove(i);
     }
   }
   for (int i = 0; i < diamonds.size(); i++) {
-    diamonds.get(i).draw();
+    diamonds.get(i).draw(pg);
     //println(i);
     //diamonds.get(i).move(dt);
     for (Ball b:balls) {
@@ -104,27 +106,7 @@ public void draw() {
     }
     
   }
-  //print(diamonds.size());
-  
-  
-  
-  moveC();
-  //Start HUD 
-  /*
-  hint(DISABLE_DEPTH_TEST);
-  //camera();
-  fill(0, 0, 0);
-  textMode(MODEL);
-  text("Points: "+ points, 50,50);
-  hint(ENABLE_DEPTH_TEST);
-  */
-  /*
-  hint(DISABLE_DEPTH_TEST);
-  camera();
-  textMode(MODEL);
-  text("Points: "+ points, 50,50);
-  hint(ENABLE_DEPTH_TEST);
-  */
+  pg.endDraw();
 }
 
 public void moveC() {
