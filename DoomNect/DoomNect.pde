@@ -64,7 +64,9 @@ public void draw() {
 
 void drawHUD(PGraphics pg){
   pg.beginDraw();
-  pg.text("loooooolololol", 10, 10);
+  pg.clear();
+  pg.textSize(32);
+  pg.text("Points: "+points, 10, 35);
   pg.endDraw();
 }
 
