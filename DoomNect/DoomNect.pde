@@ -1,4 +1,8 @@
- //<>//
+import KinectPV2.KJoint;
+import KinectPV2.*;
+
+KinectPV2 kinect;
+
 PShape s;
 PShape diamondShape;
 PShape diamondShape2;
@@ -49,6 +53,13 @@ public void setup() {
   cp5.addCanvas(cc);
   */
   time = millis();
+  
+  kinect = new KinectPV2(this);
+
+  kinect.enableSkeletonColorMap(true);
+  kinect.enableColorImg(true);
+
+  kinect.init();
 }
 
 public void draw() {
@@ -67,6 +78,23 @@ void drawHUD(PGraphics pg){
   pg.clear();
   pg.textSize(32);
   pg.text("Points: "+points, 10, 35);
+  ArrayList<KSkeleton> skeletonArray =  kinect.getSkeletonColorMap();
+
+  //individual JOINTS
+  for (int i = 0; i < skeletonArray.size(); i++) {
+    KSkeleton skeleton = (KSkeleton) skeletonArray.get(i);
+    if (skeleton.isTracked()) {
+      KJoint[] joints = skeleton.getJoints();
+
+      color col  = skeleton.getIndexColor();
+      fill(col);
+      stroke(col);
+
+      //draw different color for each hand state
+      drawHandState(joints[KinectPV2.JointType_HandRight]);
+      drawHandState(joints[KinectPV2.JointType_HandLeft]);
+    }
+  }
   pg.endDraw();
 }
 
@@ -164,6 +192,17 @@ public void shootBall() {
   balls.add(b);
 }
 
+public void shootBall(float x, float y) {
+  x = ((float)x/width-0.5);
+  y = ((float)y/height-0.5);
+  PVector dir = new PVector (1, 0, 0);
+  float rotAz = x*1.5;
+  float rotEl = y;
+  dir = c.rotY(c.rotZ(dir, c.elevation-rotEl), -c.azimuth-rotAz);
+  Ball b = new Ball(c.pos.copy(), dir.mult(750));
+  balls.add(b);
+}
+
 public void keyPressed() {
   if (key == 'w') {
     moveDir[0] = true;
@@ -186,4 +225,28 @@ public void keyReleased() {
   } else if (key == 'd') {
     moveDir[3] = false;
   } 
+}
+
+void drawHandState(KJoint joint) {
+  handState(joint);
+  //translate(joint.getX(), joint.getY(), joint.getZ());
+}
+
+void handState(KJoint j) {
+  int handState = j.getState();
+  switch(handState) {
+  case KinectPV2.HandState_Open:
+    shootBall(j.getX(), j.getY());
+    println(j.getX(), j.getY());
+    break;
+  case KinectPV2.HandState_Closed:
+    fill(255, 0, 0);
+    break;
+  case KinectPV2.HandState_Lasso:
+    fill(0, 0, 255);
+    break;
+  case KinectPV2.HandState_NotTracked:
+    fill(255, 255, 255);
+    break;
+  }
 }
