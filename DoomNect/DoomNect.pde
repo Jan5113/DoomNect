@@ -128,7 +128,7 @@ void draw3D(PGraphics pg){
         diamonds.remove(i);
         println("Removed Diamond:", i);
         balls.remove(b);
-        diamonds.add(new Diamond(new PVector(random(-100,500),random(0,100),random(-100,500)), diamondShape));
+        diamonds.add(new Diamond(new PVector(c.pos.x+random(-250, 250),c.pos.y+random(-50,50),random(-100,100)), diamondShape));
         points++;
         break;
       
