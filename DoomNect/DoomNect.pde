@@ -8,8 +8,6 @@ PShape diamondShape;
 PShape diamondShape2;
 boolean[] moveDir = {false, false, false, false};
 Camera c = new Camera(new PVector(0,50,-200));
-boolean clicking = false;
-float[] lastMousePos = {0,0};
 long time;
 ArrayList<Ball> balls = new ArrayList<Ball>();
 ArrayList<Diamond> diamonds = new ArrayList<Diamond>();
@@ -32,11 +30,9 @@ public void setup() {
   diamondShape2.scale(10);
   //diamonds.add(new Diamond(new PVector(random(100),random(50),random(50)), diamondShape));
   //diamonds.add(new Diamond(new PVector(random(50),random(50),random(50)), diamondShape));
-  
-  diamonds.add(new Diamond(new PVector(100,30,400), diamondShape));
-  diamonds.add(new Diamond(new PVector(500,30,400), diamondShape));
-  diamonds.add(new Diamond(new PVector(200,30,40), diamondShape));
-  diamonds.add(new Diamond(new PVector(100,30,200), diamondShape));
+  for (int i = 0; i<4; i++){
+  diamonds.add(new Diamond(new PVector(c.pos.x+random(-500, 500),c.pos.y+random(-250,-50),random(400,700)), diamondShape));
+}
   
   /*for(int i = 0; i<10; i++){
   diamonds.add(new Diamond(new PVector(int(random(50)), int(random(50)), int(random(50))), diamondShape));
@@ -128,7 +124,7 @@ void draw3D(PGraphics pg){
         diamonds.remove(i);
         println("Removed Diamond:", i);
         balls.remove(b);
-        diamonds.add(new Diamond(new PVector(c.pos.x+random(-250, 250),c.pos.y+random(-50,50),random(-100,100)), diamondShape));
+        diamonds.add(new Diamond(new PVector(c.pos.x+random(-250, 250),c.pos.y+random(-150,0),random(400,700)), diamondShape));
         points++;
         break;
       
@@ -155,31 +151,13 @@ public void moveC() {
   
 }
 
-public void mousePressed(){
-  clicking = true;
-  lastMousePos[0] = mouseX; lastMousePos[1] = mouseY;
-}
 
 public void points(){
   
 }
 
 public void mouseClicked(MouseEvent evt) {
-  if (evt.getCount() == 2){
-    shootBall();
-  }
-}
-
-public void mouseReleased(){
-  clicking = false;
-}
-
-public void mouseDragged(){
-  if (clicking) {
-    c.rotateView(0.005* (mouseX - lastMousePos[0]), -0.005 * (mouseY - lastMousePos[1]));
-    lastMousePos[0] = mouseX; lastMousePos[1] = mouseY;
-    //println(lastMousePos[0], lastMousePos[1]);
-  }
+  shootBall();
 }
 
 
@@ -201,30 +179,6 @@ public void shootBall(float x, float y) {
   dir = c.rotY(c.rotZ(dir, c.elevation-rotEl), -c.azimuth-rotAz);
   Ball b = new Ball(c.pos.copy(), dir.mult(750));
   balls.add(b);
-}
-
-public void keyPressed() {
-  if (key == 'w') {
-    moveDir[0] = true;
-  } else if (key == 'a') {
-    moveDir[1] = true;
-  } else if (key == 's') {
-    moveDir[2] = true;
-  } else if (key == 'd') {
-    moveDir[3] = true;
-  }
-}
-
-public void keyReleased() {
-  if (key == 'w') {
-    moveDir[0] = false;
-  } else if (key == 'a') {
-    moveDir[1] = false;
-  } else if (key == 's') {
-    moveDir[2] = false;
-  } else if (key == 'd') {
-    moveDir[3] = false;
-  } 
 }
 
 void drawHandState(KJoint joint) {

@@ -14,10 +14,6 @@ public class Ball {
     lifetime -= dt;
     vel = vel.add(PVector.mult(acc,dt));
     pos = pos.add(PVector.mult(vel,dt));
-    if(pos.y <= radius) {
-      pos.y = radius;
-      vel.y = -vel.y*0.95;
-    };
   }
   
   public void draw(PGraphics pg){
