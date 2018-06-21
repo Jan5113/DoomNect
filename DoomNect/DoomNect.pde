@@ -188,7 +188,7 @@ public void shootBall() {
   float rotAz = ((float)mouseX/width-0.5)*1.5;
   float rotEl = ((float)mouseY/height-0.5)*1;
   dir = c.rotY(c.rotZ(dir, c.elevation-rotEl), -c.azimuth-rotAz);
-  Ball b = new Ball(c.pos.copy(), dir.mult(750));
+  Ball b = new Ball(c.pos.copy(), dir.mult(1500));
   balls.add(b);
 }
 

@@ -3,12 +3,14 @@ public class Diamond{
   float diffy = 0;
   boolean collision;
   int size = 100;
+  float phase;
   //Haaa loool sourcetree figgt chnüüü
   PShape d;
   
   public Diamond(PVector position, PShape shape){
     pos = position;
     d = shape;
+    phase = random(0, 2*PI);
   }
   
   
@@ -36,7 +38,8 @@ public class Diamond{
   }
   
   public void move(){
-    diffy = sin(time/500.0)*100;
+    diffy = sin(phase + time/500.0)*100;
+    pos.z -= 2;
   }
   
 }
